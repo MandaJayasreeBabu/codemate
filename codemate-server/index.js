@@ -7,7 +7,7 @@ const app = express();
 const server = http.createServer(app);
 
 const corsOptions = {
-  origin: "https://codemate-61q2.vercel.app", // ✅ Use final deployed frontend URL
+  origin: "https://codemate-61q2.vercel.app", // ✅ Your Vercel frontend URL
   methods: ["GET", "POST"],
   credentials: true,
 };
@@ -18,13 +18,12 @@ const io = new Server(server, {
   cors: corsOptions,
 });
 
-// ✅ Socket.IO Logic
 io.on("connection", (socket) => {
-  console.log("🔌 A user connected: " + socket.id);
+  console.log("🔌 New user connected:", socket.id);
 
   socket.on("join-room", (roomId) => {
     socket.join(roomId);
-    console.log(`🛏️ Socket ${socket.id} joined room ${roomId}`);
+    console.log(`📦 User ${socket.id} joined room ${roomId}`);
   });
 
   socket.on("chat-message", ({ roomId, message }) => {
@@ -36,15 +35,15 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("❌ User disconnected: " + socket.id);
+    console.log("❌ User disconnected:", socket.id);
   });
 });
 
 app.get("/", (req, res) => {
-  res.send("Codemate backend is working!");
+  res.send("Codemate backend is running 🛠️");
 });
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🚀 Server listening on port ${PORT}`);
 });
