@@ -6,25 +6,31 @@ const cors = require('cors');
 const app = express();
 const server = http.createServer(app);
 
-// ✅ Enable CORS to allow frontend on Vercel to talk to this server
+// ✅ Replace this with your Vercel domain
+const CLIENT_ORIGIN = 'https://codemate-61q2.vercel.app';
+
+// ✅ Allow frontend to access backend
 app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST']
+  origin: CLIENT_ORIGIN,
+  methods: ['GET', 'POST'],
+  credentials: true
 }));
 
-// ✅ Optional: root route to show server is running in browser
+// ✅ Helpful root route for testing
 app.get('/', (req, res) => {
   res.send('Codemate backend is live! 🚀');
 });
 
-// ✅ Initialize Socket.IO with CORS settings
+// ✅ Initialize Socket.IO with proper CORS
 const io = new Server(server, {
   cors: {
-    origin: '*',
-    methods: ['GET', 'POST']
+    origin: CLIENT_ORIGIN,
+    methods: ['GET', 'POST'],
+    credentials: true
   }
 });
 
+// ✅ Socket event handling
 io.on('connection', (socket) => {
   console.log(`User connected: ${socket.id}`);
 
@@ -46,7 +52,7 @@ io.on('connection', (socket) => {
   });
 });
 
-// ✅ Important: use Render’s dynamic PORT
+// ✅ Important: use dynamic port for Render
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
