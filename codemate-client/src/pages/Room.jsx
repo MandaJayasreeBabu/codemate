@@ -10,26 +10,28 @@ function Room() {
   const editorRef = useRef(null);
 
   useEffect(() => {
-    socket.emit('join-room', roomId);
+    // ✅ Correct room join event name
+    socket.emit('join_room', roomId);
 
-    socket.on('chat-message', (msg) => {
+    // ✅ Correct event names
+    socket.on('chat_message', (msg) => {
       setMessages((prev) => [...prev, msg]);
     });
 
-    socket.on('code-change', (newCode) => {
+    socket.on('code_change', (newCode) => {
       setCode(newCode);
     });
 
     return () => {
-      socket.off('chat-message');
-      socket.off('code-change');
+      socket.off('chat_message');
+      socket.off('code_change');
     };
   }, [roomId]);
 
   const sendMessage = () => {
     if (input.trim()) {
-      socket.emit('chat-message', { roomId, message: input });
-      setMessages((prev) => [...prev, input]);
+      socket.emit('chat_message', { roomId, message: input });
+      setMessages((prev) => [...prev, input]); // Show your message
       setInput('');
     }
   };
@@ -37,7 +39,7 @@ function Room() {
   const handleCodeChange = (e) => {
     const newCode = e.target.value;
     setCode(newCode);
-    socket.emit('code-change', { roomId, code: newCode });
+    socket.emit('code_change', { roomId, code: newCode });
   };
 
   return (
