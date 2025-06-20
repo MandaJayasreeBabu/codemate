@@ -6,43 +6,37 @@ const { Server } = require("socket.io");
 const app = express();
 const server = http.createServer(app);
 
-// ✅ Correct CORS origin: use your real deployed frontend URL from Vercel
+// CORS for Vercel client
 const corsOptions = {
-  origin: "https://codemate-61q2.vercel.app", // ✅ Make sure this matches Vercel domain!
+  origin: "https://codemate-61q2.vercel.app",
   methods: ["GET", "POST"],
   credentials: true
 };
 
-// ✅ Apply CORS
 app.use(cors(corsOptions));
 
-// ✅ Create Socket.IO server with CORS
 const io = new Server(server, {
   cors: corsOptions
 });
 
-// ✅ Routes
-app.get("/", (req, res) => {
-  res.send("Codemate backend is working!");
-});
-
-// ✅ Socket.IO Logic
+// 🧠 ROOM-based logic
 io.on("connection", (socket) => {
   console.log("🔌 A user connected: " + socket.id);
 
-  // 🎯 Sync code with others
-  socket.on("code_change", (data) => {
-    socket.broadcast.emit("code_change", data);
-  });
-
-  // Optional: Room-based implementation
+  // Join a room
   socket.on("join_room", (roomId) => {
     socket.join(roomId);
-    console.log(`User ${socket.id} joined room ${roomId}`);
+    console.log(`📦 Socket ${socket.id} joined room ${roomId}`);
   });
 
-  socket.on("code_change_room", ({ roomId, code }) => {
-    socket.to(roomId).emit("code_change_room", code);
+  // Broadcast code changes
+  socket.on("code_change", ({ roomId, code }) => {
+    socket.to(roomId).emit("code_change", code);
+  });
+
+  // Broadcast chat messages
+  socket.on("chat_message", ({ roomId, message }) => {
+    socket.to(roomId).emit("chat_message", message);
   });
 
   socket.on("disconnect", () => {
@@ -50,7 +44,11 @@ io.on("connection", (socket) => {
   });
 });
 
-// ✅ Start Server
+// Test route
+app.get("/", (req, res) => {
+  res.send("Codemate backend is working!");
+});
+
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
