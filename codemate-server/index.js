@@ -1,59 +1,42 @@
-const express = require('express');
-const http = require('http');
-const { Server } = require('socket.io');
-const cors = require('cors');
+const express = require("express");
+const http = require("http");
+const cors = require("cors");
+const { Server } = require("socket.io");
 
 const app = express();
 const server = http.createServer(app);
 
-// ✅ Replace this with your Vercel domain
-const CLIENT_ORIGIN = 'https://codemate-61q2.vercel.app';
-
-// ✅ Allow frontend to access backend
-app.use(cors({
-  origin: CLIENT_ORIGIN,
-  methods: ['GET', 'POST'],
+// ✅ Define CORS options
+const corsOptions = {
+  origin: "https://codemate-61q2-r2sw78qsn-jayasrees-projects-efec99c6.vercel.app", // your Vercel frontend URL
+  methods: ["GET", "POST"],
   credentials: true
-}));
+};
 
-// ✅ Helpful root route for testing
-app.get('/', (req, res) => {
-  res.send('Codemate backend is live! 🚀');
-});
+// ✅ Apply CORS middleware to Express
+app.use(cors(corsOptions));
 
-// ✅ Initialize Socket.IO with proper CORS
+// ✅ Create Socket.IO server with CORS options
 const io = new Server(server, {
-  cors: {
-    origin: CLIENT_ORIGIN,
-    methods: ['GET', 'POST'],
-    credentials: true
-  }
+  cors: corsOptions
 });
 
-// ✅ Socket event handling
-io.on('connection', (socket) => {
-  console.log(`User connected: ${socket.id}`);
+// ✅ Socket.IO server logic
+io.on("connection", (socket) => {
+  console.log("🔌 A user connected: " + socket.id);
 
-  socket.on('join-room', (roomId) => {
-    socket.join(roomId);
-    console.log(`User ${socket.id} joined room ${roomId}`);
+  // 🎯 Broadcast code changes to others
+  socket.on("code_change", (data) => {
+    socket.broadcast.emit("code_change", data);
   });
 
-  socket.on('code-change', ({ roomId, code }) => {
-    socket.to(roomId).emit('code-change', code);
-  });
-
-  socket.on('chat-message', ({ roomId, message }) => {
-    socket.to(roomId).emit('chat-message', message);
-  });
-
-  socket.on('disconnect', () => {
-    console.log(`User disconnected: ${socket.id}`);
+  socket.on("disconnect", () => {
+    console.log("❌ User disconnected: " + socket.id);
   });
 });
 
-// ✅ Important: use dynamic port for Render
-const PORT = process.env.PORT || 5000;
+// ✅ Start the server
+const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
