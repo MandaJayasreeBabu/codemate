@@ -1,41 +1,56 @@
-# 💻 Codemate – Real-Time Collaborative Code Editor
+# 🧠 Codemate - Real-time Collaborative Code Editor & Chat
 
-Codemate is a web-based collaborative code editor that enables multiple users to write, edit, and share code in real-time — with integrated live chat for communication. Designed to boost productivity in pair programming, interviews, and collaborative learning.
+Codemate is a web-based real-time collaborative code editor with integrated chat, built using **React**, **Node.js**, **Express**, and **Socket.IO**.
 
 ---
 
 ## 🚀 Live Demo
 
-🔗 [Codemate Client - Vercel](#)  
-🔗 [Codemate Server - Render](#)  
-(*Coming soon: Links will be updated after deployment*)
+🌐 **Frontend (React - Vercel):**  
+👉 [https://codemate-61q2.vercel.app](https://codemate-61q2.vercel.app)
+
+🛠️ **Backend (Express API - Render):**  
+👉 [https://codemate-rkil.onrender.com](https://codemate-rkil.onrender.com)
+
+📦 **Source Code (GitHub):**  
+👉 [https://github.com/MandaJayasreeBabu/codemate](https://github.com/MandaJayasreeBabu/codemate)
 
 ---
 
-## ✨ Features
+## 📌 Features
 
-- 👩‍💻 Real-time collaborative code editing
-- 🧠 Multi-language syntax highlighting
-- 📡 Live WebSocket communication (Socket.IO)
-- 💬 Built-in real-time chat between collaborators
-- 🧾 Session persistence for consistent coding flow
-- 🔐 Secure server-client architecture
+- ✅ Join rooms using dynamic URLs
+- ✅ Real-time collaborative code editing using `Socket.IO`
+- ✅ Chat with room participants
+- ✅ Auto-sync for code and messages
+- ✅ Backend deployed on **Render**
+- ✅ Frontend deployed on **Vercel**
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Client:
-- HTML5, CSS3, JavaScript
-- React (if applicable)
-- Socket.IO client
+**Frontend:**
+- React
+- React Router
+- Vite
+- Socket.IO Client
 
-### Server:
+**Backend:**
 - Node.js
 - Express.js
-- Socket.IO server
+- Socket.IO
+
+**Deployment:**
+- Vercel (Frontend)
+- Render (Backend)
+- GitHub (Version Control)
 
 ---
 
-## 📦 Folder Structure
+## 🖥️ How to Run Locally
 
+### 🔧 Clone the repo
+```bash
+git clone https://github.com/MandaJayasreeBabu/codemate
+cd codemate
