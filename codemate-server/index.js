@@ -6,12 +6,22 @@ const cors = require('cors');
 const app = express();
 const server = http.createServer(app);
 
-app.use(cors());
+// ✅ Enable CORS to allow frontend on Vercel to talk to this server
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST']
+}));
 
+// ✅ Optional: root route to show server is running in browser
+app.get('/', (req, res) => {
+  res.send('Codemate backend is live! 🚀');
+});
+
+// ✅ Initialize Socket.IO with CORS settings
 const io = new Server(server, {
   cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
+    origin: '*',
+    methods: ['GET', 'POST']
   }
 });
 
@@ -36,7 +46,8 @@ io.on('connection', (socket) => {
   });
 });
 
-const PORT = 5000;
+// ✅ Important: use Render’s dynamic PORT
+const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
