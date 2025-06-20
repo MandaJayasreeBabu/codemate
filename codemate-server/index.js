@@ -35,6 +35,11 @@ io.on("connection", (socket) => {
   });
 });
 
+// ✅ Add a default test route
+app.get("/", (req, res) => {
+  res.send("Codemate backend is working!");
+});
+
 // ✅ Start the server
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
