@@ -10,28 +10,31 @@ function Room() {
   const editorRef = useRef(null);
 
   useEffect(() => {
-    // ✅ Correct room join event name
-    socket.emit('join_room', roomId);
+    // ✅ Join the room
+    socket.emit('join-room', roomId);
 
-    // ✅ Correct event names
-    socket.on('chat_message', (msg) => {
+    // ✅ Receive chat messages
+    socket.on('chat-message', (msg) => {
       setMessages((prev) => [...prev, msg]);
     });
 
-    socket.on('code_change', (newCode) => {
+    // ✅ Receive code changes
+    socket.on('code-change', (newCode) => {
       setCode(newCode);
     });
 
+    // ✅ Cleanup
     return () => {
-      socket.off('chat_message');
-      socket.off('code_change');
+      socket.off('chat-message');
+      socket.off('code-change');
     };
   }, [roomId]);
 
   const sendMessage = () => {
     if (input.trim()) {
-      socket.emit('chat_message', { roomId, message: input });
-      setMessages((prev) => [...prev, input]); // Show your message
+      // ✅ Emit chat message with roomId
+      socket.emit('chat-message', { roomId, message: input });
+      setMessages((prev) => [...prev, input]);
       setInput('');
     }
   };
@@ -39,7 +42,9 @@ function Room() {
   const handleCodeChange = (e) => {
     const newCode = e.target.value;
     setCode(newCode);
-    socket.emit('code_change', { roomId, code: newCode });
+
+    // ✅ Emit code change with roomId
+    socket.emit('code-change', { roomId, code: newCode });
   };
 
   return (
@@ -59,19 +64,4 @@ function Room() {
       <div>
         <input
           value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Type your message..."
-        />
-        <button onClick={sendMessage}>Send</button>
-      </div>
-
-      <ul>
-        {messages.map((msg, i) => (
-          <li key={i} style={{ textAlign: 'left' }}>{msg}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-export default Room;
+          onChange={(e) => setInpu
